@@ -3,20 +3,20 @@
 <div class="container">
     <h3>Inscription</h3>
 
-    <EditForm Model="utilisateur">
+    <EditForm EditContext="editContext">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="form-group">
             <label for="Nom">Nom</label>
-            <InputText id="Nom" class="form-control" @bind-Value="@utilisateur.Nom" />
+            <InputText id="Nom" @bind-Value="@utilisateur.Nom" @attributes='@ClassesCss("Nom")' />
         </div>
         <div class="form-group">
             <label for="Prénom">Prénom</label>
-            <InputText id="Prénom" class="form-control" @bind-Value="@utilisateur.Prénom" />
+            <InputText id="Prénom" @bind-Value="@utilisateur.Prénom" @attributes='@ClassesCss("Prénom")' />
         </div>
         <div class="form-group">
             <label for="Pays">Pays</label>
-            <InputSelect id="Pays" class="form-control" TValue="string" @bind-Value="@utilisateur.Pays">
+            <InputSelect id="Pays" TValue="string" @bind-Value="@utilisateur.Pays" @attributes='@ClassesCss("Pays")'>
                 @foreach (var pays in Pays)
                 {
                     <option>@pays</option>
@@ -25,19 +25,19 @@
         </div>
         <div class="form-group">
             <label for="Naissance">Date de naissance</label>
-            <InputDate id="Naissance" class="form-control" @bind-Value="@utilisateur.DateDeNaissance" />
+            <InputDate id="Naissance" @bind-Value="@utilisateur.DateDeNaissance" @attributes='@ClassesCss("DateDeNaissance")' />
         </div>
         <div class="form-group">
             <label for="Login">Login</label>
-            <InputText id="Login" class="form-control" @bind-Value="@utilisateur.Login" />
+            <InputText id="Login" @bind-Value="@utilisateur.Login" @attributes='@ClassesCss("Login")' />
         </div>
         <div class="form-group">
             <label for="MotDePasse">Mot de passe</label>
-            <InputText id="MotDePasse" type="password" class="form-control" @bind-Value="@utilisateur.MotDePasse" />
+            <InputText id="MotDePasse" type="password" @bind-Value="@utilisateur.MotDePasse" @attributes='@ClassesCss("MotDePasse")' />
         </div>
         <div class="form-group">
             <label for="MotDePasse2">Confirmation du mot de passe</label>
-            <InputText id="MotDePasse2" type="password" class="form-control" @bind-Value="@utilisateur.ConfirmationMotDePasse" />
+            <InputText id="MotDePasse2" type="password" @bind-Value="@utilisateur.ConfirmationMotDePasse" @attributes='@ClassesCss("ConfirmationMotDePasse")' />
         </div>
         <div class="form-check">
             <InputCheckbox id="LettreDInformation" class="form-check-input" @bind-Value="@utilisateur.LettreDInformation" />
@@ -48,6 +48,20 @@
 </div>
 @code {
     private Utilisateur utilisateur = new Utilisateur();
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(utilisateur);
+    }
+
+    private readonly IReadOnlyDictionary<string, object> ClasseInvalide = new Dictionary<string, object>() { { "class", "form-control is-invalid" } };
+    private readonly IReadOnlyDictionary<string, object> ClasseValide = new Dictionary<string, object>() { { "class", "form-control" } };
+
+    private IReadOnlyDictionary<string, object> ClassesCss(string champ) =>
+        editContext.GetValidationMessages(new FieldIdentifier(utilisateur, champ)).Any()
+            ? ClasseInvalide
+            : ClasseValide;
 
     private readonly string[] Pays = {
         "Afghanistan",
