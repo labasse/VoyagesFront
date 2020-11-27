@@ -1,5 +1,11 @@
 ﻿@inherits LayoutComponentBase
 
-<NavMenu />
-    
-@Body       
+<CascadingValue Value="styles">
+    <NavMenu />
+
+    @Body
+</CascadingValue>
+
+@code {
+    public string[] styles = { "Visite", "Nature" };
+}
