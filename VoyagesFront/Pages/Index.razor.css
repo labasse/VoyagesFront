@@ -1,0 +1,9 @@
+﻿
+.jumbotron {
+    background-position: top left;
+    background-size: cover;
+}
+
+.jumbotron p {
+    color: black
+}
