@@ -1,9 +1,11 @@
 ﻿@page "/vous"
 
+@inject IStringLocalizer<Vous> loc
+
 @using System.Text
 
 <div class="container">
-    <h3>Votre séjour</h3>
+    <h3>@loc["Title"]</h3>
 
     <div class="form-group">
         <label for="nom">Prénom Nom</label>

@@ -1,4 +1,9 @@
 ﻿@inherits LayoutComponentBase
+
+@using System.Globalization;
+@using Microsoft.AspNetCore.WebUtilities;
+
+@inject NavigationManager nav
 @inject IConfiguration conf
 @inject ILoggerFactory logFactory
 
@@ -19,5 +24,21 @@
         styles = conf.GetValue<string>("Const:Styles").Split(',');
 
         log.LogInformation("Initialisation");
+
+        if (QueryHelpers.ParseQuery(new Uri(nav.Uri).Query).TryGetValue("lang", out var paramLang))
+        {
+            CultureInfo culture;
+
+            try
+            {
+                culture = new CultureInfo(paramLang);
+            }
+            catch (CultureNotFoundException e)
+            {
+                culture = new CultureInfo("en");
+            }
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+        }
     }
 }
