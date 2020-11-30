@@ -4,6 +4,9 @@
 <Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <Authorizing>
+                VÃ©rification des autorisations en cours.
+            </Authorizing>
             <NotAuthorized>
                 @if (!context.User.Identity.IsAuthenticated)
                 {
@@ -11,7 +14,7 @@
                 }
                 else
                 {
-                    <p>Vous n'êtes pas autorisé-e à accéder à cette ressource.</p>
+                    <p>Vous n'Ãªtes pas autorisÃ©-e Ã  accÃ©der Ã  cette ressource.</p>
                 }
             </NotAuthorized>
         </AuthorizeRouteView>

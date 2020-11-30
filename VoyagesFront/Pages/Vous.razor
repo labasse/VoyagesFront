@@ -1,7 +1,12 @@
 ﻿@page "/vous"
 
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@attribute [Authorize]
+
 @inject IStringLocalizer<Vous> loc
-@inject HttpClient http
+@inject IHttpClientFactory httpFactory
 
 @using System.Text
 
@@ -33,6 +38,14 @@
 </div>
 
 @code {
+    private HttpClient http;
+
+    protected override void OnInitialized()
+    {
+        http = httpFactory.CreateClient(Program.HttpClientPrive);
+    }
+
+
     private string messageType = "";
     private string messageText = "";
 
@@ -41,18 +54,25 @@
 
     private async void ValidationSéjour()
     {
-        var reponse = await http.PostAsJsonAsync<SejourDto>($"api/sejours/{uid}", new SejourDto(séjour));
-        if (reponse.IsSuccessStatusCode)
+        try
         {
-            messageType = "success";
-            messageText = "Séjour enregistré";
+            var reponse = await http.PostAsJsonAsync<SejourDto>($"api/sejours/{uid}", new SejourDto(séjour));
+            if (reponse.IsSuccessStatusCode)
+            {
+                messageType = "success";
+                messageText = "Séjour enregistré";
+            }
+            else
+            {
+                messageType = "danger";
+                messageText = reponse.ReasonPhrase;
+            }
+            StateHasChanged();
         }
-        else
+        catch (AccessTokenNotAvailableException exception)
         {
-            messageType = "danger";
-            messageText = reponse.ReasonPhrase;
+            exception.Redirect();
         }
-        StateHasChanged();
     }
 
     private Séjour séjour = new Séjour(DateTime.Now.Date + TimeSpan.FromDays(7));
