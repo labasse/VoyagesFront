@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VoyagesFront
+namespace Voyages
 {
     public class Séjour
     {

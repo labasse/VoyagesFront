@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace VoyagesFront
+namespace Voyages
 {
     public class Utilisateur
     {
